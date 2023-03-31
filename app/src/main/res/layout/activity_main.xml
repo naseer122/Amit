@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_dashboard"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_repair_shop_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Repair Shop Name"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tv_employee_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Employee Name"
+        android:textSize="18sp"
+        android:layout_below="@id/tv_repair_shop_name"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_employee_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Employee Position"
+        android:textSize="18sp"
+        android:layout_below="@id/tv_employee_name"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"/> <TextView
+    android:id="@+id/tv_shop_createdBy"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Employee Name"
+    android:textSize="18sp"
+    android:layout_below="@id/tv_repair_shop_name"
+    android:layout_marginTop="32dp"
+    android:layout_marginLeft="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_shopcreatedat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"
+        android:textSize="18sp"
+        android:layout_below="@id/tv_employee_name"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"
+        android:textSize="18sp"
+        android:layout_below="@id/tv_employee_name"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"
+        android:textSize="18sp"
+        android:layout_below="@id/tv_employee_name"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"/>
+
+</LinearLayout>
