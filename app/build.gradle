@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.fiverr.codessolution.repaishopfiverr'
+    namespace 'com.repairshop'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.fiverr.codessolution.repaishopfiverr"
+        applicationId "com.repairshop"
         minSdk 24
         targetSdk 33
         versionCode 1

@@ -1,4 +1,4 @@
-package com.fiverr.codessolution.repaishopfiverr;
+package com.repairshop;
 
 public class Employee {
     private long id;

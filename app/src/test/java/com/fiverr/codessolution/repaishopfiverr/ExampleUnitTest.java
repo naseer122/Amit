@@ -1,4 +1,4 @@
-package com.fiverr.codessolution.repaishopfiverr;
+package com.repairshop;
 
 import org.junit.Test;
 

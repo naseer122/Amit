@@ -1,4 +1,4 @@
-package com.fiverr.codessolution.repaishopfiverr;
+package com.repairshop;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.fiverr.codessolution.repaishopfiverr", appContext.getPackageName());
+        assertEquals("com.repairshop", appContext.getPackageName());
     }
 }
