@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.style.UpdateAppearance;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String TABLE_REPAIR_SHOP = "repair_shop";
     private static final String TABLE_POSITION = "position";
     private static final String TABLE_EMPLOYEE = "employee";
+    private static final String TABLE_MAKE = "make";
+    private static final String TABLE_MODEL = "model";
+    private static final String TABLE_VTYPE = "vehicle_type";
+
 
     // Common columns
     private static final String COLUMN_ID = "id";
@@ -138,6 +143,62 @@ public class DatabaseManager extends SQLiteOpenHelper {
             + "FOREIGN KEY(" + COLUMN_POSITION_ID + ") REFERENCES " + TABLE_POSITION + "(" + COLUMN_ID + "),"
             + "FOREIGN KEY(" + COLUMN_REPAIR_SHOP_ID + ") REFERENCES " + TABLE_REPAIR_SHOP + "(" + COLUMN_ID + ")"
             + ")";
+    private static final String COLUMN_V_TYPE_NAME ="vehicle_type_name";
+    private static final String COLUMN_MAKE_ID = "make_id";
+    private static final String COLUMN_VEHICAL_ID = "vehicle_type_id";
+    private static final String COLUMN_MAKE_NAME = "make_name";
+    private static final String COLUMN_MODEL_NAME = "model_name";
+    private static final String CREATE_MAKE_TABLE = "CREATE TABLE " + TABLE_MAKE + "("
+            + COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_CREATED_BY +" VARCHAR(255),"
+            + COLUMN_CREATED_AT +" DATETIME,"
+            + COLUMN_DELETED +" INTEGER,"
+            + COLUMN_DISABLING_REASON +" VARCHAR(255),"
+            + COLUMN_ENABLED +" INTEGER,"
+            + COLUMN_UPDATED_BY +" VARCHAR(255),"
+            + COLUMN_UPDATED_AT+" DATETIME,"
+            + COLUMN_MAKE_NAME +" VARCHAR(128),"
+            + COLUMN_REPAIR_SHOP_ID+" INTEGER,"
+            + "FOREIGN KEY(" + COLUMN_REPAIR_SHOP_ID+ ") REFERENCES " + TABLE_REPAIR_SHOP + "(" + COLUMN_ID + ")"
+            + ");";
+
+    private static final String CREATE_VEHICLE_TYPE_TABLE = "CREATE TABLE " + TABLE_VTYPE + "("
+            + COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_V_TYPE_NAME +"  VARCHAR(255),"
+            + COLUMN_CREATED_BY +"  VARCHAR(255),"
+            + COLUMN_CREATED_AT +" DATETIME,"
+            + COLUMN_DELETED +" INTEGER,"
+            + COLUMN_DISABLING_REASON +" VARCHAR(255),"
+            + COLUMN_ENABLED +" INTEGER,"
+            + COLUMN_UPDATED_BY +" VARCHAR(255),"
+            + COLUMN_UPDATED_AT +" DATETIME"
+            + ");";
+
+    private static final String COLUMN_FEUL = "fuel";
+    private static final String COLUMN_Variation = "varitation";
+
+
+
+    private static final String CREATE_MODEL_TABLE = "CREATE TABLE " + TABLE_MODEL + "("
+            + COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_CREATED_BY +" VARCHAR(255),"
+            + COLUMN_CREATED_AT +" DATETIME,"
+            + COLUMN_DELETED +" INTEGER,"
+            + COLUMN_DISABLING_REASON +" VARCHAR(255),"
+            + COLUMN_ENABLED +" INTEGER,"
+            + COLUMN_UPDATED_BY +" VARCHAR(255),"
+            + COLUMN_UPDATED_AT +" DATETIME,"
+            + COLUMN_FEUL +" VARCHAR(64),"
+            + COLUMN_MODEL_NAME +" VARCHAR(128),"
+            + COLUMN_Variation +" VARCHAR(128),"
+            + COLUMN_MAKE_ID +" INTEGER,"
+            + COLUMN_REPAIR_SHOP_ID +" INTEGER,"
+            + COLUMN_VEHICAL_ID +" INTEGER,"
+            + "FOREIGN KEY(" + COLUMN_MAKE_ID + ") REFERENCES " + TABLE_MAKE + "(" + COLUMN_ID + "),"
+            + "FOREIGN KEY(" + COLUMN_REPAIR_SHOP_ID+ ") REFERENCES " + TABLE_REPAIR_SHOP + "(" + COLUMN_ID + "),"
+            + "FOREIGN KEY(" + COLUMN_VEHICAL_ID+ ") REFERENCES " + TABLE_VTYPE + "(" + COLUMN_ID + ")"
+            + ");";
+
     public long insertEmployee(String firstName, String lastName, String email, String phone, long positionId, long repairShopId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -151,6 +212,96 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
         return result;
     }
+    public long addVehicalType(String vehicleType,String createdBy){
+        // Insert data into the Vehicle Type table
+        ContentValues vehicleTypeValues = new ContentValues();
+        vehicleTypeValues.put("vehicle_type_name", vehicleType);
+        vehicleTypeValues.put("created_by", createdBy);
+        vehicleTypeValues.put("created_at", System.currentTimeMillis());
+        vehicleTypeValues.put("enabled", true);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long vehicleTypeId = db.insert(TABLE_VTYPE, null, vehicleTypeValues);
+        db.close();
+        return vehicleTypeId;
+    }
+    public long addVehicalMake(String make,String createdBy,long repairShopId){
+        // Insert data into the Make table
+        ContentValues makeValues = new ContentValues();
+        makeValues.put("make_name", make);
+        makeValues.put("created_by", createdBy);
+        makeValues.put("created_at", System.currentTimeMillis());
+        makeValues.put("enabled", true);
+        makeValues.put("repair_shop_id", repairShopId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long makeId = db.insert(TABLE_MAKE, null, makeValues);
+        db.close();
+        return makeId;
+    }
+
+    public long addVehicalModel(String model, String fuel, String createdBy, long repairShopId, long makeId , long vehicleTypeId ){
+        // Insert data into the Model table
+        ContentValues modelValues = new ContentValues();
+        modelValues.put("model_name", model);
+        modelValues.put("fuel", fuel);
+        modelValues.put("created_by", createdBy);
+        modelValues.put("created_at", System.currentTimeMillis());
+        modelValues.put("enabled", true);
+        modelValues.put("repair_shop_id", repairShopId);
+        modelValues.put("make_id", makeId);
+        modelValues.put("vehicle_type_id", vehicleTypeId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long addVehical =   db.insert(TABLE_MODEL, null, modelValues);
+        db.close();
+        return addVehical;
+    }
+
+    public ArrayList<vehical> getAlldata(){
+        ArrayList<vehical> vehicals = new ArrayList<>();
+
+        // Open the database for reading
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define a projection that specifies which columns to retrieve from the tables
+        String selectQuery = "SELECT " +
+                TABLE_MODEL +"." + COLUMN_ID + ", " +
+                TABLE_MODEL +"." + COLUMN_CREATED_BY + ", " +
+                TABLE_MODEL +"."+ COLUMN_CREATED_AT + ", " +
+                TABLE_MODEL +"." + COLUMN_DELETED + ", " +
+                TABLE_MODEL +"." + COLUMN_DISABLING_REASON + ", " +
+                TABLE_MODEL +"."+ COLUMN_ENABLED + ", " +
+                TABLE_MODEL +"." + COLUMN_UPDATED_BY + ", " +
+                TABLE_MODEL +"." + COLUMN_UPDATED_AT + ", " +
+                TABLE_MODEL +"." + COLUMN_MODEL_NAME + ", " +
+                TABLE_VTYPE +"." + COLUMN_V_TYPE_NAME + " AS vehicle_type_name, " +
+                TABLE_MAKE +"." + COLUMN_MAKE_NAME + " AS make_name, " +
+                TABLE_REPAIR_SHOP +"." + COLUMN_NAME + " AS repair_shop_name " +
+                "FROM " + TABLE_MODEL + " model " +
+        "LEFT JOIN " + TABLE_VTYPE + " vehicle_type " +
+                "ON model." + COLUMN_VEHICAL_ID + " = vehicle_type." + COLUMN_ID + " " +
+                "LEFT JOIN " + TABLE_MAKE + " make " +
+                "ON model." + COLUMN_MAKE_ID + " = make." + COLUMN_ID + " " +
+                "LEFT JOIN " + TABLE_REPAIR_SHOP + " repair_shop " +
+                "ON model." + COLUMN_REPAIR_SHOP_ID + " = repair_shop." + COLUMN_ID;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                vehical model = new vehical();
+                model.setId(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID)));
+                model.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL_NAME)));
+                model.setVehicleTypeName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_V_TYPE_NAME)));
+                model.setMakeName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAKE_NAME)));
+                model.setRepairShopName(cursor.getString(cursor.getColumnIndexOrThrow("repair_shop_name")));
+                vehicals.add(model);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return vehicals;
+
+    }
     public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -159,6 +310,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_REPAIR_SHOP);
         db.execSQL(CREATE_TABLE_POSITION);
         db.execSQL(CREATE_TABLE_EMPLOYEE);
+        db.execSQL(CREATE_MODEL_TABLE);
+        db.execSQL(CREATE_VEHICLE_TYPE_TABLE);
+        db.execSQL(CREATE_MAKE_TABLE);
     }
 
     @Override
@@ -168,9 +322,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_POSITION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPAIR_SHOP);
 
+
+
+
         // Create tables again
         onCreate(db);
     }
+
+
     public String getEmployeeName() {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + TABLE_EMPLOYEE + "." + COL_EMP_FIRST_NAME + ", "
@@ -234,48 +393,20 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return dateFormat.format(date);
     }
 
-    public List<Map<String, String>> getAllShopAndEmployeeData() {
-        List<Map<String, String>> dataList = new ArrayList<>();
+
+
+    public long getRepairId(String name){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT " + TABLE_REPAIR_SHOP + "." + COLUMN_NAME + ", "
-                + TABLE_REPAIR_SHOP + "." + COLUMN_ADDRESS + ", "
-                + TABLE_REPAIR_SHOP + "." + COLUMN_EMAIL + ", "
-                + TABLE_REPAIR_SHOP + "." + COLUMN_CREATED_AT + ", "
-                + TABLE_REPAIR_SHOP + "." + COLUMN_CREATED_BY + ", "
-                + TABLE_EMPLOYEE + "." + COL_EMP_FIRST_NAME + ", "
-                + TABLE_EMPLOYEE + "." + COL_EMP_LAST_NAME + ", "
-                + TABLE_POSITION + "." + COLUMN_POSITION_NAME
-                + " FROM " + TABLE_REPAIR_SHOP
-                + " JOIN " + TABLE_EMPLOYEE
-                + " ON " + TABLE_REPAIR_SHOP + "." + COLUMN_CREATED_BY + "="
-                + TABLE_EMPLOYEE + "." + COLUMN_ID
-                + " JOIN " + TABLE_POSITION
-                + " ON " + TABLE_EMPLOYEE + "." + COLUMN_POSITION_ID + "="
-                + TABLE_POSITION + "." + COLUMN_ID;
-        Cursor cursor = db.rawQuery(query, null);
-        while (cursor.moveToNext()) {
-            Map<String, String> dataMap = new HashMap<>();
-            String shopName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
-            String shopAddress = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS));
-            String shopEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
-            String shopCreatedAt = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT));
-            String shopCreatedBy = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_BY));
-            String employeeFirstName = cursor.getString(cursor.getColumnIndexOrThrow(COL_EMP_FIRST_NAME));
-            String employeeLastName = cursor.getString(cursor.getColumnIndexOrThrow(COL_EMP_LAST_NAME));
-            String employeePosition = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POSITION_NAME));
-            dataMap.put("shopName", shopName);
-            dataMap.put("shopAddress", shopAddress);
-            dataMap.put("shopEmail", shopEmail);
-            dataMap.put("shopCreatedAt", shopCreatedAt);
-            dataMap.put("shopCreatedBy", shopCreatedBy);
-            dataMap.put("employeeName", employeeFirstName + " " + employeeLastName);
-            dataMap.put("employeePosition", employeePosition);
-            dataList.add(dataMap);
+        long id = -1;
+        String[] columns = {COLUMN_ID};
+        String selection = COLUMN_NAME + "=?";
+        String[] selectionArgs = {name};
+        Cursor cursor = db.query(TABLE_REPAIR_SHOP, columns, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID));
         }
         cursor.close();
         db.close();
-        return dataList;
+        return id;
     }
-
-
 }

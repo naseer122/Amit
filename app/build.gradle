@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.repairshop'
+    namespace 'com.repairshop.amit'
     compileSdk 33
 
     defaultConfig {

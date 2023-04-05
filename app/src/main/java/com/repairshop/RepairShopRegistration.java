@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.repairshop.amit.R;
+
 public class RepairShopRegistration extends AppCompatActivity {
 
     private EditText etShopName, etOwnerFirstName, etOwnerLastName, etAddress, etPhone, etEmail, etGSTIN, etDescription;
@@ -108,4 +110,6 @@ public class RepairShopRegistration extends AppCompatActivity {
         databaseHelper = new DatabaseManager(this);
 
     }
+
+
 }
