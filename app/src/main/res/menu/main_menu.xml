@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item android:id="@+id/addCarMake"
+    android:title="Add make"
+    app:showAsAction="never"/>
+    <item android:id="@+id/addCarModel"
+        android:title="Add Model"
+        app:showAsAction="never"/>
+    <item android:id="@+id/addCarType"
+        android:title="Add Car Type"
+        app:showAsAction="never"/>
+</menu>

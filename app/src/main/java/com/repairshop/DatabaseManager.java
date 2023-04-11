@@ -255,53 +255,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return addVehical;
     }
 
-    public ArrayList<vehical> getAlldata(){
-        ArrayList<vehical> vehicals = new ArrayList<>();
 
-        // Open the database for reading
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // Define a projection that specifies which columns to retrieve from the tables
-        String selectQuery = "SELECT " +
-                TABLE_MODEL +"." + COLUMN_ID + ", " +
-                TABLE_MODEL +"." + COLUMN_CREATED_BY + ", " +
-                TABLE_MODEL +"."+ COLUMN_CREATED_AT + ", " +
-                TABLE_MODEL +"." + COLUMN_DELETED + ", " +
-                TABLE_MODEL +"." + COLUMN_DISABLING_REASON + ", " +
-                TABLE_MODEL +"."+ COLUMN_ENABLED + ", " +
-                TABLE_MODEL +"." + COLUMN_UPDATED_BY + ", " +
-                TABLE_MODEL +"." + COLUMN_UPDATED_AT + ", " +
-                TABLE_MODEL +"." + COLUMN_MODEL_NAME + ", " +
-                TABLE_VTYPE +"." + COLUMN_V_TYPE_NAME + " AS vehicle_type_name, " +
-                TABLE_MAKE +"." + COLUMN_MAKE_NAME + " AS make_name, " +
-                TABLE_REPAIR_SHOP +"." + COLUMN_NAME + " AS repair_shop_name " +
-                "FROM " + TABLE_MODEL + " model " +
-        "LEFT JOIN " + TABLE_VTYPE + " vehicle_type " +
-                "ON model." + COLUMN_VEHICAL_ID + " = vehicle_type." + COLUMN_ID + " " +
-                "LEFT JOIN " + TABLE_MAKE + " make " +
-                "ON model." + COLUMN_MAKE_ID + " = make." + COLUMN_ID + " " +
-                "LEFT JOIN " + TABLE_REPAIR_SHOP + " repair_shop " +
-                "ON model." + COLUMN_REPAIR_SHOP_ID + " = repair_shop." + COLUMN_ID;
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                vehical model = new vehical();
-                model.setId(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID)));
-                model.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL_NAME)));
-                model.setVehicleTypeName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_V_TYPE_NAME)));
-                model.setMakeName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MAKE_NAME)));
-                model.setRepairShopName(cursor.getString(cursor.getColumnIndexOrThrow("repair_shop_name")));
-                vehicals.add(model);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return vehicals;
-
-    }
     public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
